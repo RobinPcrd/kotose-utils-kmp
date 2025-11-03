@@ -46,7 +46,7 @@ if (gradle.startParameter.taskNames.none { it.startsWith(":example:composeApp") 
 }
 
 include(
-    ":core",
-    ":resources",
+    ":kotose-core",
+    ":kotose-resources",
     ":example:composeApp"
 )

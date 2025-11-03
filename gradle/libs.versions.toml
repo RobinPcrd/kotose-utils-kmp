@@ -73,6 +73,7 @@ kotlinx-serialization-json = "1.9.0"
 runner = "1.7.0"
 core = "1.7.0"
 truth = "1.4.5"
+vanniktech-mavenPublish = "0.34.0"
 
 [libraries]
 
@@ -94,3 +95,6 @@ junit = { module = "junit:junit", version.ref = "junit" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-testJunit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
+gradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+vanniktech-maven-publish-gradle-plugin = { module = "com.vanniktech.maven.publish:com.vanniktech.maven.publish.gradle.plugin", version.ref = "vanniktech-mavenPublish" }

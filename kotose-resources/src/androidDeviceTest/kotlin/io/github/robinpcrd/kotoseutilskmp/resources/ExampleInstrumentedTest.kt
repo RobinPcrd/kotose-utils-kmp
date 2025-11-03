@@ -15,11 +15,12 @@ import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import com.google.common.truth.Truth.assertThat
+import io.github.robinpcrd.kotose_resources.generated.resources.Res
+import io.github.robinpcrd.kotose_resources.generated.resources.allStringResources
+import io.github.robinpcrd.kotose_resources.generated.resources.test_string_0
+import io.github.robinpcrd.kotoseutilskmpandroid.test.R
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.json.Json
-import kotose_utils_kmp.resources.generated.resources.Res
-import kotose_utils_kmp.resources.generated.resources.allStringResources
-import kotose_utils_kmp.resources.generated.resources.test_string_0
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -29,7 +30,7 @@ class ExampleInstrumentedTest {
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     private val strRes0From = StrRes(
-        PlatformStrRes(io.github.robinpcrd.kotoseutilskmp.resources.test.R.string.test_string_0_from),
+        PlatformStrRes(R.string.test_string_0_from),
         formatArgs = persistentListOf("John Doe")
     )
 
@@ -46,7 +47,7 @@ class ExampleInstrumentedTest {
                 Text("Test")
                 Box(Modifier.testTag("test-box-0")) {
                     val abc by rememberResourceAsState {
-                        getString(io.github.robinpcrd.kotoseutilskmp.resources.test.R.string.test_string_0)
+                        getString(R.string.test_string_0)
                     }
                     Text(abc)
                 }
@@ -64,7 +65,7 @@ class ExampleInstrumentedTest {
         //composeTestRule.waitForIdle()
         val activity = composeTestRule.activity
         val string0 =
-            activity.getString(io.github.robinpcrd.kotoseutilskmp.resources.test.R.string.test_string_0)
+            activity.getString(R.string.test_string_0)
         composeTestRule.onNodeWithText(string0).isDisplayed()
 
         val string1 = strRes0From.getString(activity)
@@ -104,7 +105,7 @@ class ExampleInstrumentedTest {
         println(composeStrRes2.getString(composeTestRule.activity))
 
         val platformStrRes = PlatformStrRes(
-            stringRes = io.github.robinpcrd.kotoseutilskmp.resources.test.R.string.test_string_0
+            stringRes = R.string.test_string_0
         )
         val json2 = Json.encodeToString(platformStrRes)
         println(json2)
