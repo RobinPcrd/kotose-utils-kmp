@@ -13,9 +13,9 @@ import androidx.compose.ui.test.onNodeWithText
 import com.google.common.truth.Truth.assertThat
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.json.Json
-import kotose_utils_kmp.core.generated.resources.Res
-import kotose_utils_kmp.core.generated.resources.allStringResources
-import kotose_utils_kmp.core.generated.resources.test_string_0
+import kotose_utils_kmp.resources.generated.resources.Res
+import kotose_utils_kmp.resources.generated.resources.allStringResources
+import kotose_utils_kmp.resources.generated.resources.test_string_0
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
