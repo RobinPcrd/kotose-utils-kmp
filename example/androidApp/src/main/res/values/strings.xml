@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Kotoseutilskmp</string>
+    <string name="hello_with_args">Hello %1$s, you have %2$d new messages</string>
+</resources>

@@ -11,7 +11,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import kotlinx.coroutines.runBlocking
 
 @Composable
@@ -19,7 +19,7 @@ inline fun <T> rememberResourceAsState(
     crossinline block: @DisallowComposableCalls suspend Resources.() -> T,
 ): State<T> {
     LocalConfiguration.current
-    val resources = LocalContext.current.resources
+    val resources = LocalResources.current //LocalContext.current.resources
     return remember(resources) {
         mutableStateOf(
             runBlocking { block(resources) }
@@ -33,7 +33,7 @@ inline fun <T> rememberResourceAsState(
     crossinline block: @DisallowComposableCalls suspend Resources.() -> T,
 ): State<T> {
     LocalConfiguration.current
-    val resources = LocalContext.current.resources
+    val resources = LocalResources.current //LocalContext.current.resources
     return remember(key1, resources) {
         mutableStateOf(
             runBlocking { block(resources) }
@@ -48,7 +48,7 @@ inline fun <T> rememberResourceAsState(
     crossinline block: @DisallowComposableCalls suspend Resources.() -> T,
 ): State<T> {
     LocalConfiguration.current
-    val resources = LocalContext.current.resources
+    val resources = LocalResources.current //LocalContext.current.resources
     return remember(key1, key2, resources) {
         mutableStateOf(
             runBlocking { block(resources) }
@@ -64,7 +64,7 @@ inline fun <T> rememberResourceAsState(
     crossinline block: @DisallowComposableCalls suspend Resources.() -> T,
 ): State<T> {
     LocalConfiguration.current
-    val resources = LocalContext.current.resources
+    val resources = LocalResources.current //LocalContext.current.resources
     return remember(key1, key2, key3, resources) {
         mutableStateOf(
             runBlocking { block(resources) }
@@ -78,7 +78,7 @@ inline fun <T> rememberResourceAsState(
     crossinline block: @DisallowComposableCalls suspend Resources.() -> T,
 ): State<T> {
     LocalConfiguration.current
-    val resources = LocalContext.current.resources
+    val resources = LocalResources.current //LocalContext.current.resources
     return remember(*keys, resources) {
         mutableStateOf(
             runBlocking { block(resources) }
@@ -91,7 +91,7 @@ inline fun <T> rememberResource(
     crossinline block: @DisallowComposableCalls suspend Resources.() -> T,
 ): T {
     LocalConfiguration.current
-    val resources = LocalContext.current.resources
+    val resources = LocalResources.current //LocalContext.current.resources
     return remember(resources) {
         runBlocking { block(resources) }
     }
@@ -103,7 +103,7 @@ inline fun <T> rememberResource(
     crossinline block: @DisallowComposableCalls suspend Resources.() -> T,
 ): T {
     LocalConfiguration.current
-    val resources = LocalContext.current.resources
+    val resources = LocalResources.current //LocalContext.current.resources
     return remember(key1, resources) {
         runBlocking { block(resources) }
     }
@@ -116,7 +116,7 @@ inline fun <T> rememberResource(
     crossinline block: @DisallowComposableCalls suspend Resources.() -> T,
 ): T {
     LocalConfiguration.current
-    val resources = LocalContext.current.resources
+    val resources = LocalResources.current //LocalContext.current.resources
     return remember(key1, key2, resources) {
         runBlocking { block(resources) }
     }
@@ -130,7 +130,7 @@ inline fun <T> rememberResource(
     crossinline block: @DisallowComposableCalls suspend Resources.() -> T,
 ): T {
     LocalConfiguration.current
-    val resources = LocalContext.current.resources
+    val resources = LocalResources.current //LocalContext.current.resources
     return remember(key1, key2, key3, resources) {
         runBlocking { block(resources) }
     }
@@ -142,7 +142,7 @@ inline fun <T> rememberResource(
     crossinline block: @DisallowComposableCalls suspend Resources.() -> T,
 ): T {
     LocalConfiguration.current
-    val resources = LocalContext.current.resources
+    val resources = LocalResources.current //LocalContext.current.resources
     return remember(*keys, resources) {
         runBlocking { block(resources) }
     }

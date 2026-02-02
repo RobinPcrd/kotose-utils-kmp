@@ -7,6 +7,7 @@ package io.github.robinpcrd.kotoseutilskmp
 import io.github.robinpcrd.kotoseutilskmp.resources.PlatformStrRes
 import io.github.robinpcrd.kotoseutilskmp.resources.StrRes
 import io.github.robinpcrd.kotoseutilskmp.resources.toStrRes
+import io.github.robinpcrd.kotoseutilskmp.shared.R
 import kotlinx.collections.immutable.persistentListOf
 
 actual object SamplePlatformStrRes {

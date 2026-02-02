@@ -1,15 +1,19 @@
 plugins {
-    //id("com.android.library")
+    id("org.jetbrains.kotlin.multiplatform")
     id("com.android.kotlin.multiplatform.library")
-    kotlin("multiplatform")
+}
+
+// Allow modules with no host tests (e.g. kotose-core) to build without failure
+tasks.withType<Test>().configureEach {
+    failOnNoDiscoveredTests = false
 }
 
 kotlin {
-    jvmToolchain(11)
+    jvmToolchain(17)
 
     applyDefaultHierarchyTemplate()
 
-    androidLibrary {
+    android {
         namespace = "io.github.robinpcrd.kotoseutilskmp${name.filter { it.isLetter() }}"
         compileSdk = (findProperty("android.compileSdk") as String).toInt()
         minSdk = (findProperty("android.minSdk") as String).toInt()

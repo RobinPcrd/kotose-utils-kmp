@@ -3,6 +3,7 @@ import com.vanniktech.maven.publish.KotlinMultiplatform
 import java.util.Properties
 
 plugins {
+    id("org.jetbrains.dokka")
     id("com.vanniktech.maven.publish")
     signing
 }
@@ -20,18 +21,13 @@ version = System.getenv("VERSION") ?: if (isGithubActions)
 else
     "0.0.0-LOCAL"
 
-// TODO use Dokka and fix this
-val javadocJar by tasks.registering(Jar::class) {
-    archiveClassifier.set("javadoc")
-}
-
 mavenPublishing {
     publishToMavenCentral(automaticRelease = true)
 
     coordinates(project.group as String, project.name, project.version as String)
     configure(
         KotlinMultiplatform(
-            javadocJar = JavadocJar.Empty(),
+            javadocJar = JavadocJar.Dokka("dokkaGeneratePublicationHtml"),
             sourcesJar = true,
         )
     )

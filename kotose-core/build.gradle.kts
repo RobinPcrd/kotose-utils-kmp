@@ -1,7 +1,3 @@
-@file:OptIn(ExperimentalComposeLibrary::class)
-
-import org.jetbrains.compose.ExperimentalComposeLibrary
-
 plugins {
     id("multiplatform-module-convention")
     //alias(libs.plugins.kotlinMultiplatform)
@@ -78,8 +74,8 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.kotlinx.collections.immutable)
-                implementation(compose.ui)
-                implementation(compose.components.resources)
+                implementation(libs.jb.compose.ui)
+                implementation(libs.jb.compose.resources)
                 implementation(libs.kotlinx.serialization.json)
             }
         }
@@ -107,11 +103,10 @@ kotlin {
                 implementation(libs.androidx.testExt.junit)
                 implementation(libs.compose.ui.test.manifest)
                 implementation(libs.kotlinx.serialization.json)
-                implementation(compose.foundation)
-                implementation(compose.ui)
-                implementation(compose.material)
-                implementation(compose.uiTest)
-                implementation(compose.desktop.uiTestJUnit4)
+                implementation(libs.jb.compose.foundation)
+                implementation(libs.jb.compose.ui)
+                implementation(libs.jb.compose.ui.test)
+                implementation(libs.jb.compose.ui.test.junit4)
             }
         }
 
@@ -119,7 +114,7 @@ kotlin {
             dependencies {
                 // Add iOS-specific dependencies here. This a source set created by Kotlin Gradle
                 // Plugin (KGP) that each specific iOS target (e.g., iosX64) depends on as
-                // part of KMP’s default source set hierarchy. Note that this source set depends
+                // part of KMP's default source set hierarchy. Note that this source set depends
                 // on common by default and will correctly pull the iOS artifacts of any
                 // KMP dependencies declared in commonMain.
             }

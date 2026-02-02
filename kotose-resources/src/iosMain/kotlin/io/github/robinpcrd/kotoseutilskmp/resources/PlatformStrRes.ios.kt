@@ -34,10 +34,11 @@ actual object PlatformStrResSerializer : KSerializer<PlatformStrRes> {
         encoder: Encoder,
         value: PlatformStrRes
     ) {
-        throw NotImplementedError()
+        encoder.encodeString("")
     }
 
     actual override fun deserialize(decoder: Decoder): PlatformStrRes {
-        throw NotImplementedError()
+        decoder.decodeString()
+        return PlatformStrRes()
     }
 }

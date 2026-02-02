@@ -33,14 +33,16 @@ plugins {
 }
 
 // Skip the example app when building the libraries
-if (gradle.startParameter.taskNames.none { it.startsWith(":example:composeApp") }) {
+if (gradle.startParameter.taskNames.none { it.startsWith(":example:") }) {
     startParameter.excludedTaskNames.addAll(
         listOf(
             ":example:composeApp:build",
-            ":example:composeApp:assembleDebug",
-            ":example:composeApp:assembleDebugUnitTest",
-            ":example:composeApp:assembleDebugAndroidTest",
             ":example:composeApp:assemble",
+            ":example:androidApp:build",
+            ":example:androidApp:assembleDebug",
+            ":example:androidApp:assembleDebugUnitTest",
+            ":example:androidApp:assembleDebugAndroidTest",
+            ":example:androidApp:assemble",
         ),
     )
 }
@@ -48,5 +50,6 @@ if (gradle.startParameter.taskNames.none { it.startsWith(":example:composeApp") 
 include(
     ":kotose-core",
     ":kotose-resources",
-    ":example:composeApp"
+    ":example:composeApp",
+    ":example:androidApp",
 )

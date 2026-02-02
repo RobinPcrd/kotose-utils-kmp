@@ -12,6 +12,19 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
+/**
+ * Wraps platform-native string resource identifiers.
+ *
+ * On **Android**, this holds `@StringRes`/`@PluralsRes` resource IDs and resolves them
+ * via the Android resource system.
+ *
+ * On **iOS**, `getString()` returns `null` because there are no Android resources available.
+ * For cross-platform string resources, use [StrRes] with `composeString` (Compose Multiplatform
+ * resources) or `text` (plain string) instead.
+ *
+ * Serialization round-trips gracefully on all platforms — the iOS serializer encodes/decodes
+ * an empty string without crashing.
+ */
 @Immutable
 @Serializable
 expect class PlatformStrRes {

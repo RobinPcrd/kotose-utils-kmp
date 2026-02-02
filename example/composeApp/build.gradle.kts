@@ -1,12 +1,13 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
-    //alias(libs.plugins.kotlinMultiplatform)
-    //alias(libs.plugins.androidApplication)
-    id("com.android.application")
     kotlin("multiplatform")
+    id("com.android.kotlin.multiplatform.library")
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+}
+
+compose.resources {
+    publicResClass = true
+    packageOfResClass = "kotose_utils_kmp.example.composeapp.generated.resources"
 }
 
 kotlin {
@@ -16,9 +17,14 @@ kotlin {
         )
     }
 
-    androidTarget {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+    android {
+        namespace = "io.github.robinpcrd.kotoseutilskmp.shared"
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
+        minSdk = libs.versions.android.minSdk.get().toInt()
+
+        @Suppress("UnstableApiUsage")
+        androidResources {
+            enable = true
         }
     }
 
@@ -36,19 +42,18 @@ kotlin {
 
     sourceSets {
         androidMain.dependencies {
-            implementation(compose.preview)
-            implementation(libs.androidx.activity.compose)
+            implementation(libs.jb.compose.ui.tooling.preview)
         }
         commonMain.dependencies {
-            implementation(projects.kotoseResources)
+            api(projects.kotoseResources)
             implementation(libs.kotlinx.collections.immutable)
 
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
+            implementation(libs.jb.compose.runtime)
+            implementation(libs.jb.compose.foundation)
+            implementation(libs.jb.compose.material3)
+            implementation(libs.jb.compose.ui)
+            api(libs.jb.compose.resources)
+            implementation(libs.jb.compose.ui.tooling.preview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
         }
@@ -57,35 +62,3 @@ kotlin {
         }
     }
 }
-
-android {
-    namespace = "io.github.robinpcrd.kotoseutilskmp"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-
-    defaultConfig {
-        applicationId = "io.github.robinpcrd.kotoseutilskmp"
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-}
-
-dependencies {
-    debugImplementation(compose.uiTooling)
-}
-
