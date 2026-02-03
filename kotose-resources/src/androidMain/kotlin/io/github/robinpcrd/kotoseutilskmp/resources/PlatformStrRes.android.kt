@@ -27,6 +27,7 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.encoding.decodeStructure
 import kotlinx.serialization.encoding.encodeStructure
+import kotlinx.serialization.json.JsonArray
 
 @Immutable
 @Serializable
@@ -122,7 +123,7 @@ actual object PlatformStrResSerializer : KSerializer<PlatformStrRes> {
             element<Int?>("stringRes", isOptional = true)
             element<Int?>("pluralRes", isOptional = true)
             element<Int?>("quantity", isOptional = true)
-            element<List<Any>>("formatArgs")
+            element("formatArgs", JsonArray.serializer().descriptor)
         }
 
     actual override fun serialize(encoder: Encoder, value: PlatformStrRes) {

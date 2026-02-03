@@ -6,11 +6,15 @@ package io.github.robinpcrd.kotoseutilskmp.resources
 
 import org.jetbrains.compose.resources.PluralStringResource
 import org.jetbrains.compose.resources.StringResource
+import kotlin.concurrent.Volatile
 
 internal object Setup {
+    @Volatile
     var getStringResource: (String) -> StringResource? = {
         error("KotoseUtils.setup() must be called before using string resources")
     }
+
+    @Volatile
     var getPluralStringResource: (String) -> PluralStringResource? = {
         error("KotoseUtils.setup() must be called before using plural string resources")
     }
@@ -18,6 +22,7 @@ internal object Setup {
     //    error("KotoseUtils.setup() must be called before using string array resources")
     //}
 
+    @Volatile
     internal var isInitialized = false
         private set
 
@@ -98,6 +103,7 @@ object KotoseUtils {
 
     /**
      * Initialize KotoseUtils library. Must be called before using any library features.
+     * This method is idempotent — subsequent calls are no-ops.
      *
      * Typical usage in your Application class or main function:
      * ```
@@ -116,18 +122,10 @@ object KotoseUtils {
      *             else -> error("Unknown plural resource: $key")
      *         }
      *     }
-     *
-     *     stringArrayResourceResolver { key ->
-     *         when (key) {
-     *             "countries" -> Res.array.countries
-     *             else -> error("Unknown array resource: $key")
-     *         }
-     *     }
      * }
      * ```
      *
      * @param config Configuration block for setting up resource resolvers
-     * @throws IllegalStateException if setup is called multiple times
      */
     fun setup(config: KotoseUtilsConfig.() -> Unit) {
         if (Setup.isInitialized)

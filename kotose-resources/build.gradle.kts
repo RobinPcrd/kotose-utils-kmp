@@ -19,31 +19,6 @@ kotlin {
         )
     }
 
-    // Target declarations - add or remove as needed below. These define
-    // which platforms this KMP module supports.
-    // See: https://kotlinlang.org/docs/multiplatform-discover-project.html#targets
-    //androidLibrary {
-    //    namespace = "io.github.robinpcrd.kotoseutilskmp.resources"
-    //    compileSdk = 36
-    //    minSdk = 24
-//
-    //    androidResources {
-    //        enable = true
-    //    }
-//
-    //    withHostTestBuilder {
-//
-    //    }.configure {
-    //        isIncludeAndroidResources = true
-    //    }
-//
-    //    withDeviceTestBuilder {
-    //        sourceSetTreeName = "test"
-    //    }.configure {
-    //        instrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    //    }
-    //}
-
     // For iOS targets, this is also where you should
     // configure native binary output. For more information, see:
     // https://kotlinlang.org/docs/multiplatform-build-native-binaries.html#build-xcframeworks

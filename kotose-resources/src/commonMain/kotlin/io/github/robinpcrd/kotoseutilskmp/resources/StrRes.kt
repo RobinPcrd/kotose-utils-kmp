@@ -13,6 +13,18 @@ import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.PluralStringResource
 import org.jetbrains.compose.resources.StringResource
 
+/**
+ * Unified string resource wrapper supporting platform-native resources ([PlatformStrRes]),
+ * Compose Multiplatform resources ([StringResource], [PluralStringResource]), and plain text.
+ *
+ * Not a data class — [copy] would allow creating invalid states (e.g. both
+ * [platformStrRes] and [composeString] set).
+ *
+ * **Format args:** [formatArgs] apply to [composeString], [composePluralString], and [text]
+ * paths. [PlatformStrRes] uses its own format args; this [formatArgs] is ignored for that path.
+ *
+ * **Serialization:** JSON only ([FormatArgsSerializer] requires [JsonEncoder]/[JsonDecoder]).
+ */
 @Immutable
 @Serializable
 class StrRes internal constructor(
@@ -97,6 +109,7 @@ class StrRes internal constructor(
                 *formatArgs.toTypedArray()
             )
 
+            text != null && formatArgs.isNotEmpty() -> formatString(text, formatArgs)
             text != null -> text
             else -> null
         }

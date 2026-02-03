@@ -16,8 +16,8 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import com.google.common.truth.Truth.assertThat
 import io.github.robinpcrd.kotose_resources.generated.resources.Res
-import io.github.robinpcrd.kotose_resources.generated.resources.allStringResources
 import io.github.robinpcrd.kotose_resources.generated.resources.test_string_0
+import io.github.robinpcrd.kotose_resources.generated.resources.test_string_0_from
 import io.github.robinpcrd.kotoseutilskmpandroid.test.R
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.json.Json
@@ -25,7 +25,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class ExampleInstrumentedTest {
+class StrResInstrumentedTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
@@ -34,11 +34,21 @@ class ExampleInstrumentedTest {
         formatArgs = persistentListOf("John Doe")
     )
 
+    // Test resources map - includes androidDeviceTest compose resources
+    private val testStringResources by lazy {
+        listOf(
+            Res.string.test_string_0,
+            Res.string.test_string_0_from,
+        ).associateBy { it.key }
+    }
+
+    @OptIn(InternalKotoseUtilsApi::class)
     @Before
     fun setup() {
+        KotoseUtils.reset()
         KotoseUtils.setup {
-            this.stringResourceResolver { key ->
-                Res.allStringResources[key]
+            stringResourceResolver { key ->
+                testStringResources[key]
             }
         }
 

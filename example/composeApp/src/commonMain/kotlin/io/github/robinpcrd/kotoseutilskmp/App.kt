@@ -22,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.github.robinpcrd.kotoseutilskmp.resources.StrRes
 import kotlinx.collections.immutable.persistentListOf
@@ -30,7 +31,6 @@ import kotose_utils_kmp.example.composeapp.generated.resources.compose_multiplat
 import kotose_utils_kmp.example.composeapp.generated.resources.hello
 import kotose_utils_kmp.example.composeapp.generated.resources.hello_format
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 private val SampleStrRes = StrRes(
     composeString = Res.string.hello,

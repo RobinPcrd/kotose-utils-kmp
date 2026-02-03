@@ -18,12 +18,9 @@ import kotlinx.serialization.encoding.Encoder
  * On **Android**, this holds `@StringRes`/`@PluralsRes` resource IDs and resolves them
  * via the Android resource system.
  *
- * On **iOS**, `getString()` returns `null` because there are no Android resources available.
- * For cross-platform string resources, use [StrRes] with `composeString` (Compose Multiplatform
- * resources) or `text` (plain string) instead.
- *
- * Serialization round-trips gracefully on all platforms — the iOS serializer encodes/decodes
- * an empty string without crashing.
+ * On **iOS**, this holds a localization key and resolves it via `NSBundle.localizedStringForKey`.
+ * Format args are applied after resolution, supporting both Java-style (`%1$s`) and
+ * iOS-style (`%1$@`, `%lld`) specifiers.
  */
 @Immutable
 @Serializable
