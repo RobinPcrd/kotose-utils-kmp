@@ -65,4 +65,51 @@ class FormatArgsSerializerTest {
         val decoded = json.decodeFromString(FormatArgsSerializer, encoded)
         assertEquals(1, decoded.size)
     }
+
+    @Test
+    fun serializeAndDeserializeLongArg() {
+        val args = persistentListOf<Any>(9223372036854775807L)
+        val encoded = json.encodeToString(FormatArgsSerializer, args)
+        val decoded = json.decodeFromString(FormatArgsSerializer, encoded)
+        assertEquals(args, decoded)
+    }
+
+    @Test
+    fun serializeAndDeserializeFloatArg() {
+        val args = persistentListOf<Any>(3.14f)
+        val encoded = json.encodeToString(FormatArgsSerializer, args)
+        val decoded = json.decodeFromString(FormatArgsSerializer, encoded)
+        assertEquals(args, decoded)
+    }
+
+    @Test
+    fun serializeAndDeserializeDoubleArg() {
+        val args = persistentListOf<Any>(2.718281828459045)
+        val encoded = json.encodeToString(FormatArgsSerializer, args)
+        val decoded = json.decodeFromString(FormatArgsSerializer, encoded)
+        assertEquals(args, decoded)
+    }
+
+    @Test
+    fun serializeAndDeserializeBooleanArg() {
+        val args = persistentListOf<Any>(true, false)
+        val encoded = json.encodeToString(FormatArgsSerializer, args)
+        val decoded = json.decodeFromString(FormatArgsSerializer, encoded)
+        assertEquals(args, decoded)
+    }
+
+    @Test
+    fun serializeAndDeserializeAllPrimitiveTypes() {
+        val args = persistentListOf<Any>(
+            "text",
+            42,
+            123456789012345L,
+            1.5f,
+            3.14159265358979,
+            true
+        )
+        val encoded = json.encodeToString(FormatArgsSerializer, args)
+        val decoded = json.decodeFromString(FormatArgsSerializer, encoded)
+        assertEquals(args, decoded)
+    }
 }

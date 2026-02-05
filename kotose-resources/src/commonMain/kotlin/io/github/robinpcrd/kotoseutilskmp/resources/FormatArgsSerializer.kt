@@ -18,13 +18,17 @@ import kotlinx.serialization.json.JsonDecoder
 import kotlinx.serialization.json.JsonEncoder
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.boolean
 import kotlinx.serialization.json.buildJsonArray
 import kotlinx.serialization.json.decodeFromJsonElement
+import kotlinx.serialization.json.double
 import kotlinx.serialization.json.encodeToJsonElement
+import kotlinx.serialization.json.float
 import kotlinx.serialization.json.int
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.serialization.json.long
 
 object FormatArgsSerializer : KSerializer<ImmutableList<Any>> {
 
@@ -56,6 +60,42 @@ object FormatArgsSerializer : KSerializer<ImmutableList<Any>> {
                         )
                     )
 
+                    is Long -> add(
+                        JsonObject(
+                            mapOf(
+                                "type" to JsonPrimitive("long"),
+                                "value" to JsonPrimitive(arg)
+                            )
+                        )
+                    )
+
+                    is Float -> add(
+                        JsonObject(
+                            mapOf(
+                                "type" to JsonPrimitive("float"),
+                                "value" to JsonPrimitive(arg)
+                            )
+                        )
+                    )
+
+                    is Double -> add(
+                        JsonObject(
+                            mapOf(
+                                "type" to JsonPrimitive("double"),
+                                "value" to JsonPrimitive(arg)
+                            )
+                        )
+                    )
+
+                    is Boolean -> add(
+                        JsonObject(
+                            mapOf(
+                                "type" to JsonPrimitive("boolean"),
+                                "value" to JsonPrimitive(arg)
+                            )
+                        )
+                    )
+
                     is StrRes -> add(
                         JsonObject(
                             mapOf(
@@ -76,7 +116,7 @@ object FormatArgsSerializer : KSerializer<ImmutableList<Any>> {
 
                     else -> throw SerializationException(
                         "Unsupported format arg type: ${arg::class}. " +
-                                "Allowed types: String, Int, StrRes, PlatformStringRes"
+                                "Allowed types: String, Int, Long, Float, Double, Boolean, StrRes, PlatformStrRes"
                     )
                 }
             }
@@ -100,6 +140,10 @@ object FormatArgsSerializer : KSerializer<ImmutableList<Any>> {
             when (type) {
                 "string" -> valueElement.jsonPrimitive.content
                 "int" -> valueElement.jsonPrimitive.int
+                "long" -> valueElement.jsonPrimitive.long
+                "float" -> valueElement.jsonPrimitive.float
+                "double" -> valueElement.jsonPrimitive.double
+                "boolean" -> valueElement.jsonPrimitive.boolean
                 "strres" -> decoder.json.decodeFromJsonElement<StrRes>(valueElement)
                 "platform" -> decoder.json.decodeFromJsonElement<PlatformStrRes>(valueElement)
                 else -> throw SerializationException("Unknown format arg type: $type")
