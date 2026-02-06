@@ -15,6 +15,7 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonDecoder
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonEncoder
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
@@ -36,89 +37,30 @@ object FormatArgsSerializer : KSerializer<ImmutableList<Any>> {
         element<JsonArray>("formatArgs")
     }
 
+    private fun encodeArg(type: String, value: JsonElement) =
+        JsonObject(mapOf("type" to JsonPrimitive(type), "value" to value))
+
     override fun serialize(encoder: Encoder, value: ImmutableList<Any>) {
         require(encoder is JsonEncoder) { "This serializer only works with JSON" }
 
         val jsonArray = buildJsonArray {
             value.forEach { arg ->
-                when (arg) {
-                    is String -> add(
-                        JsonObject(
-                            mapOf(
-                                "type" to JsonPrimitive("string"),
-                                "value" to JsonPrimitive(arg)
-                            )
+                add(
+                    when (arg) {
+                        is String -> encodeArg("string", JsonPrimitive(arg))
+                        is Int -> encodeArg("int", JsonPrimitive(arg))
+                        is Long -> encodeArg("long", JsonPrimitive(arg))
+                        is Float -> encodeArg("float", JsonPrimitive(arg))
+                        is Double -> encodeArg("double", JsonPrimitive(arg))
+                        is Boolean -> encodeArg("boolean", JsonPrimitive(arg))
+                        is StrRes -> encodeArg("strres", encoder.json.encodeToJsonElement(arg))
+                        is PlatformStrRes -> encodeArg("platform", encoder.json.encodeToJsonElement(arg))
+                        else -> throw SerializationException(
+                            "Unsupported format arg type: ${arg::class}. " +
+                                    "Allowed types: String, Int, Long, Float, Double, Boolean, StrRes, PlatformStrRes"
                         )
-                    )
-
-                    is Int -> add(
-                        JsonObject(
-                            mapOf(
-                                "type" to JsonPrimitive("int"),
-                                "value" to JsonPrimitive(arg)
-                            )
-                        )
-                    )
-
-                    is Long -> add(
-                        JsonObject(
-                            mapOf(
-                                "type" to JsonPrimitive("long"),
-                                "value" to JsonPrimitive(arg)
-                            )
-                        )
-                    )
-
-                    is Float -> add(
-                        JsonObject(
-                            mapOf(
-                                "type" to JsonPrimitive("float"),
-                                "value" to JsonPrimitive(arg)
-                            )
-                        )
-                    )
-
-                    is Double -> add(
-                        JsonObject(
-                            mapOf(
-                                "type" to JsonPrimitive("double"),
-                                "value" to JsonPrimitive(arg)
-                            )
-                        )
-                    )
-
-                    is Boolean -> add(
-                        JsonObject(
-                            mapOf(
-                                "type" to JsonPrimitive("boolean"),
-                                "value" to JsonPrimitive(arg)
-                            )
-                        )
-                    )
-
-                    is StrRes -> add(
-                        JsonObject(
-                            mapOf(
-                                "type" to JsonPrimitive("strres"),
-                                "value" to encoder.json.encodeToJsonElement(arg)
-                            )
-                        )
-                    )
-
-                    is PlatformStrRes -> add(
-                        JsonObject(
-                            mapOf(
-                                "type" to JsonPrimitive("platform"),
-                                "value" to encoder.json.encodeToJsonElement(arg)
-                            )
-                        )
-                    )
-
-                    else -> throw SerializationException(
-                        "Unsupported format arg type: ${arg::class}. " +
-                                "Allowed types: String, Int, Long, Float, Double, Boolean, StrRes, PlatformStrRes"
-                    )
-                }
+                    }
+                )
             }
         }
 
