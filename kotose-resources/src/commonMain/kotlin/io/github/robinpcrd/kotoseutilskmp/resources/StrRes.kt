@@ -12,12 +12,14 @@ import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.PluralStringResource
 import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.getPluralString
+import org.jetbrains.compose.resources.getString
 
 /**
  * Unified string resource wrapper supporting platform-native resources ([PlatformStrRes]),
  * Compose Multiplatform resources ([StringResource], [PluralStringResource]), and plain text.
  *
- * Not a data class — [copy] would allow creating invalid states (e.g. both
+ * Not a data class - [copy] would allow creating invalid states (e.g. both
  * [platformStrRes] and [composeString] set).
  *
  * **Format args:** [formatArgs] apply to [composeString], [composePluralString], and [text]
@@ -117,6 +119,38 @@ class StrRes internal constructor(
 
     @Composable
     fun getStringOrEmpty(): String = getString().orEmpty()
+
+    /**
+     * Non-composable suspend resolution.
+     *
+     * Resolves [composeString], [composePluralString], [text], and [platformStrRes]
+     * on all platforms. On Android, [platformStrRes] resolution requires
+     * [KotoseUtilsConfig.androidContext] to be configured during setup.
+     */
+    suspend fun getStringSuspend(): String? {
+        val resolvedArgs = formatArgs.map {
+            when (it) {
+                is StrRes -> it.getStringSuspend() ?: ""
+                else -> it
+            }
+        }
+
+        return when {
+            platformStrRes != null -> platformStrRes.getStringSuspend()
+            composeString != null -> getString(composeString, *resolvedArgs.toTypedArray())
+            composePluralString != null && quantity != null -> getPluralString(
+                composePluralString,
+                quantity,
+                *resolvedArgs.toTypedArray()
+            )
+
+            text != null && resolvedArgs.isNotEmpty() -> formatString(text, resolvedArgs)
+            text != null -> text
+            else -> null
+        }
+    }
+
+    suspend fun getStringSuspendOrEmpty(): String = getStringSuspend().orEmpty()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

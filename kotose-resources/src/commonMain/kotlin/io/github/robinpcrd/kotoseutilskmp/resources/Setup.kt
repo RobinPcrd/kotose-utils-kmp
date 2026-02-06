@@ -103,7 +103,7 @@ object KotoseUtils {
 
     /**
      * Initialize KotoseUtils library. Must be called before using any library features.
-     * This method is idempotent — subsequent calls are no-ops.
+     * This method is idempotent - subsequent calls are no-ops.
      *
      * Typical usage in your Application class or main function:
      * ```

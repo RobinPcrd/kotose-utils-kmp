@@ -27,6 +27,16 @@ import kotlinx.serialization.encoding.Encoder
 expect class PlatformStrRes {
     @Composable
     fun getString(): String?
+
+    /**
+     * Non-composable suspend resolution.
+     *
+     * On **iOS**, resolves via `NSBundle.localizedStringForKey`.
+     * On **Android**, resolves via the context provided through
+     * [KotoseUtilsConfig.androidContext] during setup.
+     * Returns `null` if no context was configured.
+     */
+    suspend fun getStringSuspend(): String?
 }
 
 expect object PlatformStrResSerializer : KSerializer<PlatformStrRes> {

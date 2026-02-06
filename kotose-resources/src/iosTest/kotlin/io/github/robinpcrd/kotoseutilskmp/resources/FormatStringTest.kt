@@ -221,13 +221,13 @@ class FormatStringTest {
 
     @Test
     fun percentLiteralNotMatched() {
-        // %% is not a format specifier — should pass through unchanged
+        // %% is not a format specifier - should pass through unchanged
         assertEquals("100%%", formatString("100%%", emptyList()))
     }
 
     @Test
     fun unknownSpecifierNotMatched() {
-        // %c, %x, %o etc. are not in our regex — should pass through unchanged
+        // %c, %x, %o etc. are not in our regex - should pass through unchanged
         assertEquals("char: %c hex: %x", formatString("char: %c hex: %x", listOf("a", 255)))
     }
 

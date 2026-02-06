@@ -28,7 +28,6 @@ import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.encoding.decodeStructure
 import kotlinx.serialization.encoding.encodeStructure
 import kotlinx.serialization.json.JsonArray
-
 @Immutable
 @Serializable
 actual data class PlatformStrRes(
@@ -42,26 +41,44 @@ actual data class PlatformStrRes(
 ) {
     @Composable
     actual fun getString(): String? {
-        val formatArgs = formatArgs.map {
-            when (it) {
-                is StrRes -> it.getString() ?: String()
-                else -> it
-            }
-        }
+        val resolvedArgs = formatArgs.map { if (it is StrRes) it.getString() ?: "" else it }
         return when {
-            pluralRes != null && formatArgs.isEmpty() -> pluralStringResource(
-                id = pluralRes,
-                count = quantity ?: 0
-            )
-
+            pluralRes != null && resolvedArgs.isEmpty() -> pluralStringResource(id = pluralRes, count = quantity ?: 0)
             pluralRes != null -> pluralStringResource(
                 id = pluralRes,
                 count = quantity ?: 0,
-                *formatArgs.toTypedArray()
+                *resolvedArgs.toTypedArray()
             )
 
-            stringRes != null && formatArgs.isEmpty() -> stringResource(id = stringRes)
-            stringRes != null -> stringResource(id = stringRes, *formatArgs.toTypedArray())
+            stringRes != null && resolvedArgs.isEmpty() -> stringResource(id = stringRes)
+            stringRes != null -> stringResource(id = stringRes, *resolvedArgs.toTypedArray())
+            else -> null
+        }
+    }
+
+    /**
+     * Resolves this resource outside a Compose scope using the context
+     * provided via [KotoseUtilsConfig.androidContext].
+     *
+     * Returns `null` if no context was configured or if neither [stringRes]
+     * nor [pluralRes] is set.
+     */
+    actual suspend fun getStringSuspend(): String? {
+        val resources = AndroidSetup.appContext?.resources ?: return null
+        val resolvedArgs = formatArgs.map { if (it is StrRes) it.getStringSuspend() ?: "" else it }
+        return when {
+            pluralRes != null && resolvedArgs.isEmpty() ->
+                resources.getQuantityString(pluralRes, quantity ?: 0)
+
+            pluralRes != null ->
+                resources.getQuantityString(pluralRes, quantity ?: 0, *resolvedArgs.toTypedArray())
+
+            stringRes != null && resolvedArgs.isEmpty() ->
+                resources.getString(stringRes)
+
+            stringRes != null ->
+                resources.getString(stringRes, *resolvedArgs.toTypedArray())
+
             else -> null
         }
     }
@@ -103,9 +120,23 @@ fun StrRes.getString(resources: Resources): String? {
     }
 }
 
-fun @receiver:StringRes Int.toStrRes() = StrRes(
-    PlatformStrRes(stringRes = this)
-)
+fun @receiver:StringRes Int.toStrRes(
+    formatArgs: ImmutableList<Any> = persistentListOf()
+) = StrRes(PlatformStrRes(stringRes = this, formatArgs = formatArgs))
+
+fun @receiver:StringRes Int.toPlatformStrRes(
+    formatArgs: ImmutableList<Any> = persistentListOf()
+) = PlatformStrRes(stringRes = this, formatArgs = formatArgs)
+
+fun @receiver:PluralsRes Int.toStrRes(
+    quantity: Int,
+    formatArgs: ImmutableList<Any> = persistentListOf()
+) = StrRes(PlatformStrRes(pluralRes = this, quantity = quantity, formatArgs = formatArgs))
+
+fun @receiver:PluralsRes Int.toPlatformStrRes(
+    quantity: Int,
+    formatArgs: ImmutableList<Any> = persistentListOf()
+) = PlatformStrRes(pluralRes = this, quantity = quantity, formatArgs = formatArgs)
 
 @Composable
 fun rememberStrRes(strRes: StrRes): String? = rememberResource(strRes) {

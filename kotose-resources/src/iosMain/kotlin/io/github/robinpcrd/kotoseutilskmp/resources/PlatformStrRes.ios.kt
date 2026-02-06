@@ -29,19 +29,21 @@ actual data class PlatformStrRes(
     @Serializable(FormatArgsSerializer::class)
     val formatArgs: ImmutableList<Any> = persistentListOf(),
 ) {
-    @Composable
-    actual fun getString(): String? {
+    private fun resolve(resolvedArgs: List<Any>): String? {
         val resolved = NSBundle.mainBundle.localizedStringForKey(key, value = key, table = null)
         if (resolved == key) return null // key not found in bundle
-        if (formatArgs.isEmpty()) return resolved
-        val args = formatArgs.map {
-            when (it) {
-                is StrRes -> it.getString() ?: ""
-                else -> it
-            }
-        }
-        return formatString(resolved, args)
+        if (resolvedArgs.isEmpty()) return resolved
+        return formatString(resolved, resolvedArgs)
     }
+
+    @Composable
+    actual fun getString(): String? = resolve(
+        formatArgs.map { if (it is StrRes) it.getString() ?: "" else it }
+    )
+
+    actual suspend fun getStringSuspend(): String? = resolve(
+        formatArgs.map { if (it is StrRes) it.getStringSuspend() ?: "" else it }
+    )
 }
 
 actual object PlatformStrResSerializer : KSerializer<PlatformStrRes> {
