@@ -4,10 +4,10 @@ Kotlin Multiplatform utilities for Compose Multiplatform (Android + iOS).
 
 ## Modules
 
-| Description                                                   | Module                                         |
-|---------------------------------------------------------------|------------------------------------------------|
-| Serializable resource management (`StrRes`, `PlatformStrRes`) | [kotose-resources](kotose-resources/README.md) | 
-| Android context extensions                                    | [kotose-core](kotose-core/README.md)           |
+| Module                                         | Description                                                   |
+|------------------------------------------------|---------------------------------------------------------------|
+| [kotose-resources](kotose-resources/README.md) | Serializable resource management (`StrRes`, `PlatformStrRes`) | 
+| [kotose-core](kotose-core/README.md)           | Android context extensions                                    |
 
 ## Installation
 
@@ -59,3 +59,6 @@ Copyright 2025-present Robin PICARD and contributors.
 Licensed under the Apache License, Version 2.0.
 ```
 
+---
+
+Originally created at [PandaLab](https://www.pandalab.fr/).
