@@ -30,6 +30,8 @@ jobs:
             -   uses: gradle/actions/setup-gradle@v4
 
             -   run: ./gradlew dokkaGenerate
+                env:
+                    VERSION: 0.0.0-DOCS
 
             -   uses: actions/upload-pages-artifact@v3
                 with:

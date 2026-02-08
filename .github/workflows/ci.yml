@@ -26,3 +26,5 @@ jobs:
             -   uses: gradle/actions/setup-gradle@v4
 
             -   run: ./gradlew build
+                env:
+                    VERSION: 0.0.0-CI
