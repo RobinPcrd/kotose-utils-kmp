@@ -12,4 +12,5 @@ plugins {
     id(libs.plugins.androidKotlinMultiplatformLibrary.get().pluginId) apply false
     //alias(libs.plugins.androidLint) apply false
     alias(libs.plugins.kotlinSerialization) apply false
+    alias(libs.plugins.dokka)
 }
