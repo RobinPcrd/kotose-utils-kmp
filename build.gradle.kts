@@ -12,5 +12,10 @@ plugins {
     id(libs.plugins.androidKotlinMultiplatformLibrary.get().pluginId) apply false
     //alias(libs.plugins.androidLint) apply false
     alias(libs.plugins.kotlinSerialization) apply false
-    id(libs.plugins.dokka.get().pluginId) apply false
+    id(libs.plugins.dokka.get().pluginId)
+}
+
+dependencies {
+    dokka(project(":kotose-core"))
+    dokka(project(":kotose-resources"))
 }
