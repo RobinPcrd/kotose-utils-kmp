@@ -4,13 +4,10 @@
 
 package io.github.robinpcrd.kotoseutilskmp.resources
 
-import android.content.Context
-import android.content.res.Resources
 import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.State
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import kotlinx.collections.immutable.ImmutableList
@@ -28,6 +25,7 @@ import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.encoding.decodeStructure
 import kotlinx.serialization.encoding.encodeStructure
 import kotlinx.serialization.json.JsonArray
+
 @Immutable
 @Serializable
 actual data class PlatformStrRes(
@@ -82,70 +80,6 @@ actual data class PlatformStrRes(
             else -> null
         }
     }
-}
-
-fun StrRes.getString(context: Context): String? = getString(context.resources)
-
-fun StrRes.getString(resources: Resources): String? {
-    val formatArgs = formatArgs.map {
-        when (it) {
-            is StrRes -> it.getString(resources).orEmpty()
-            else -> it
-        }
-    }
-    return when {
-        platformStrRes != null && platformStrRes.pluralRes != null && formatArgs.isEmpty() -> resources.getQuantityString(
-            platformStrRes.pluralRes,
-            platformStrRes.quantity ?: 0
-        )
-
-        platformStrRes != null && platformStrRes.pluralRes != null -> resources.getQuantityString(
-            platformStrRes.pluralRes,
-            platformStrRes.quantity ?: 0,
-            *formatArgs.toTypedArray()
-        )
-
-        platformStrRes != null && platformStrRes.stringRes != null && formatArgs.isEmpty() -> resources.getString(
-            platformStrRes.stringRes
-        )
-
-        platformStrRes != null && platformStrRes.stringRes != null -> resources.getString(
-            platformStrRes.stringRes,
-            *formatArgs.toTypedArray()
-        )
-
-        formatArgs.isEmpty() -> text
-        text != null -> String.format(text, *formatArgs.toTypedArray())
-        else -> null
-    }
-}
-
-fun @receiver:StringRes Int.toStrRes(
-    formatArgs: ImmutableList<Any> = persistentListOf()
-) = StrRes(PlatformStrRes(stringRes = this, formatArgs = formatArgs))
-
-fun @receiver:StringRes Int.toPlatformStrRes(
-    formatArgs: ImmutableList<Any> = persistentListOf()
-) = PlatformStrRes(stringRes = this, formatArgs = formatArgs)
-
-fun @receiver:PluralsRes Int.toStrRes(
-    quantity: Int,
-    formatArgs: ImmutableList<Any> = persistentListOf()
-) = StrRes(PlatformStrRes(pluralRes = this, quantity = quantity, formatArgs = formatArgs))
-
-fun @receiver:PluralsRes Int.toPlatformStrRes(
-    quantity: Int,
-    formatArgs: ImmutableList<Any> = persistentListOf()
-) = PlatformStrRes(pluralRes = this, quantity = quantity, formatArgs = formatArgs)
-
-@Composable
-fun rememberStrRes(strRes: StrRes): String? = rememberResource(strRes) {
-    strRes.getString(this)
-}
-
-@Composable
-fun rememberStrResAsState(strRes: StrRes): State<String?> = rememberResourceAsState(strRes) {
-    strRes.getString(this)
 }
 
 actual object PlatformStrResSerializer : KSerializer<PlatformStrRes> {
