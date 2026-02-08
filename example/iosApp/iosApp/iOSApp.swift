@@ -9,6 +9,12 @@ import ComposeApp
 struct iOSApp: App {
     init() {
         AppInitKt.doInitKotoseUtils { config in
+            config.stringResourceResolver { key in
+                Res.shared.allStringResources[key]
+            }
+            config.pluralStringResourceResolver { key in
+                Res.shared.allPluralStringResources[key]
+            }
         }
     }
 
