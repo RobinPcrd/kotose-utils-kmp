@@ -1,44 +1,61 @@
-This is a Kotlin Multiplatform project targeting Android, iOS.
+# Kotose Utils KMP
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform
-  applications.
-  It contains several subfolders:
-    - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-    - Other folders are for Kotlin code that will be compiled for only the platform indicated in the
-      folder name.
-      For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-      the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-      Similarly, if you want to edit the Desktop (JVM) specific part,
-      the [jvmMain](./composeApp/src/jvmMain/kotlin)
-      folder is the appropriate location.
+Kotlin Multiplatform utilities for Compose Multiplatform (Android + iOS).
 
-* [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose
-  Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for
-  your project.
+## Modules
 
-### Build and Run Android Application
+| Description                                                   | Module                                         |
+|---------------------------------------------------------------|------------------------------------------------|
+| Serializable resource management (`StrRes`, `PlatformStrRes`) | [kotose-resources](kotose-resources/README.md) | 
+| Android context extensions                                    | [kotose-core](kotose-core/README.md)           |
 
-To build and run the development version of the Android app, use the run configuration from the run
-widget
-in your IDE’s toolbar or build it directly from the terminal:
+## Installation
 
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:assembleDebug
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:assembleDebug
-  ```
+```kotlin
+// Resources (StrRes, PlatformStrRes, serialization)
+implementation("io.github.robinpcrd:kotose-resources:<VERSION>")
 
-### Build and Run iOS Application
+// Android context extensions
+implementation("io.github.robinpcrd:kotose-core:<VERSION>")
+```
 
-To build and run the development version of the iOS app, use the run configuration from the run
-widget
-in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and run it from there.
+## Platforms
 
----
+- **Android** SDK 24+
+- **iOS** arm64, x64, simulatorArm64
 
-Learn more
-about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+## Quick Start
+
+```kotlin
+// Setup (once, at app init)
+KotoseUtils.setup {
+    androidContext(context) // Android only - enables getStringSuspend()
+    stringResourceResolver { key -> Res.allStringResources[key] }
+    pluralStringResourceResolver { key -> Res.allPluralStringResources[key] }
+}
+
+// Create resources
+val text = "Hello".toStrRes()
+val compose = Res.string.app_name.toStrRes()
+val android = R.string.greeting.toStrRes()  // Android only
+
+// Resolve in Composable
+@Composable
+fun Greeting(strRes: StrRes) {
+    Text(strRes.getStringOrEmpty())
+}
+```
+
+See module READMEs for detailed usage.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for build, test, and contribution guidelines.
+
+## License
+
+```
+Copyright 2025-present Robin PICARD and contributors.
+Licensed under the Apache License, Version 2.0.
+```
+
