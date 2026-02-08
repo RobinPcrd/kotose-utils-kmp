@@ -112,4 +112,54 @@ class StrResTest {
         assertEquals(original.text, restored.text)
         assertEquals(original.formatArgs, restored.formatArgs)
     }
+
+    @Test
+    fun serializeAndDeserializeWithPlatformStrRes() {
+        val platform = PlatformStrRes()
+        val original = StrRes(platformStrRes = platform)
+        val json = Json.encodeToString(StrRes.serializer(), original)
+        val restored = Json.decodeFromString(StrRes.serializer(), json)
+        assertEquals(original, restored)
+    }
+
+    @Test
+    fun serializeAndDeserializeWithNestedStrResInFormatArgs() {
+        val nested = StrRes(text = "inner")
+        val original = StrRes(
+            text = "Hello %s",
+            formatArgs = persistentListOf(nested)
+        )
+        val json = Json.encodeToString(StrRes.serializer(), original)
+        val restored = Json.decodeFromString(StrRes.serializer(), json)
+        assertEquals(original.text, restored.text)
+        assertEquals(original.formatArgs, restored.formatArgs)
+    }
+
+    @Test
+    fun inequalityByFormatArgs() {
+        val a = StrRes(
+            text = "Hello %s",
+            formatArgs = persistentListOf("Alice")
+        )
+        val b = StrRes(
+            text = "Hello %s",
+            formatArgs = persistentListOf("Bob")
+        )
+        assertNotEquals(a, b)
+    }
+
+    @Test
+    fun inequalityByQuantity() {
+        val a = StrRes(
+            composePluralString = null,
+            quantity = 1,
+            text = "item"
+        )
+        val b = StrRes(
+            composePluralString = null,
+            quantity = 5,
+            text = "item"
+        )
+        assertNotEquals(a, b)
+    }
 }

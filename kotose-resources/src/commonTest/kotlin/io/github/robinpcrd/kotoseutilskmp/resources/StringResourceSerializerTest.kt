@@ -145,4 +145,23 @@ class StringResourceSerializerTest {
     }
 
     // endregion
+
+    // region Not-initialized errors
+
+    @Test
+    fun deserializeStringResourceWithoutSetupThrows() {
+        // Setup not called - resolvers should throw meaningful error
+        assertFailsWith<IllegalStateException> {
+            json.decodeFromString(StringResourceSerializer, "\"any_key\"")
+        }
+    }
+
+    @Test
+    fun deserializePluralStringResourceWithoutSetupThrows() {
+        assertFailsWith<IllegalStateException> {
+            json.decodeFromString(PluralStringResourceSerializer, "\"any_key\"")
+        }
+    }
+
+    // endregion
 }

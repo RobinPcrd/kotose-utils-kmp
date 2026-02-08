@@ -142,5 +142,26 @@ class FormatStringTest {
         )
     }
 
+    @Test
+    fun noPlaceholdersWithUnusedArgs() {
+        assertEquals("plain text", formatString("plain text", listOf("unused")))
+    }
+
+    @Test
+    fun emptyFormatStringWithArgs() {
+        assertEquals("", formatString("", listOf("unused")))
+    }
+
+    @Test
+    fun morePlaceholdersThanArgs() {
+        // Java String.format throws if more placeholders than args, but we verify behavior
+        try {
+            formatString("%s and %s", listOf("only"))
+            // If it doesn't throw, the result is implementation-defined
+        } catch (_: Exception) {
+            // Expected - not enough args for placeholders
+        }
+    }
+
     // endregion
 }

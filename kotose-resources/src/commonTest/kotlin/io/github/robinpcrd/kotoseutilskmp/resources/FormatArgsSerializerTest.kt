@@ -5,9 +5,11 @@
 package io.github.robinpcrd.kotoseutilskmp.resources
 
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 class FormatArgsSerializerTest {
 
@@ -111,5 +113,34 @@ class FormatArgsSerializerTest {
         val encoded = json.encodeToString(FormatArgsSerializer, args)
         val decoded = json.decodeFromString(FormatArgsSerializer, encoded)
         assertEquals(args, decoded)
+    }
+
+    @Test
+    fun serializeUnsupportedTypeThrows() {
+        val args = persistentListOf<Any>(listOf("not supported"))
+        assertFailsWith<SerializationException> {
+            json.encodeToString(FormatArgsSerializer, args)
+        }
+    }
+
+    @Test
+    fun deserializeMissingTypeFieldThrows() {
+        assertFailsWith<SerializationException> {
+            json.decodeFromString(FormatArgsSerializer, """[{"value": "hello"}]""")
+        }
+    }
+
+    @Test
+    fun deserializeMissingValueFieldThrows() {
+        assertFailsWith<SerializationException> {
+            json.decodeFromString(FormatArgsSerializer, """[{"type": "string"}]""")
+        }
+    }
+
+    @Test
+    fun deserializeUnknownTypeThrows() {
+        assertFailsWith<SerializationException> {
+            json.decodeFromString(FormatArgsSerializer, """[{"type": "date", "value": "2025-01-01"}]""")
+        }
     }
 }

@@ -7,6 +7,7 @@ package io.github.robinpcrd.kotoseutilskmp.resources
 import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -69,5 +70,20 @@ class KotoseUtilsSetupTest {
             stringResourceResolver { null }
         }
         assertTrue(KotoseUtils.isInitialized())
+    }
+
+    @OptIn(InternalKotoseUtilsApi::class)
+    @Test
+    fun resolversErrorAfterReset() {
+        KotoseUtils.setup {
+            stringResourceResolver { null }
+        }
+        KotoseUtils.reset()
+        assertFailsWith<IllegalStateException> {
+            Setup.getStringResource("any_key")
+        }
+        assertFailsWith<IllegalStateException> {
+            Setup.getPluralStringResource("any_key")
+        }
     }
 }
