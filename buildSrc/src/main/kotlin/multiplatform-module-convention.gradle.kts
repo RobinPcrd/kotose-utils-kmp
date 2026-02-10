@@ -14,7 +14,7 @@ kotlin {
     applyDefaultHierarchyTemplate()
 
     android {
-        namespace = "io.github.robinpcrd.kotoseutilskmp${name.filter { it.isLetter() }}"
+        namespace = "io.github.robinpcrd.kotoseutilskmp.${project.name.removePrefix("kotose-")}"
         compileSdk = (findProperty("android.compileSdk") as String).toInt()
         minSdk = (findProperty("android.minSdk") as String).toInt()
 
