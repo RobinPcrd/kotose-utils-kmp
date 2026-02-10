@@ -18,7 +18,7 @@ kotlin {
     }
 
     android {
-        namespace = "io.github.robinpcrd.kotoseutilskmp.shared"
+        namespace = "io.github.robinpcrd.kotose.shared"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
 

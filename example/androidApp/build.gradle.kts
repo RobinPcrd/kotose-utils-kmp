@@ -9,11 +9,11 @@ kotlin {
 }
 
 android {
-    namespace = "io.github.robinpcrd.kotoseutilskmp"
+    namespace = "io.github.robinpcrd.kotose"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "io.github.robinpcrd.kotoseutilskmp"
+        applicationId = "io.github.robinpcrd.kotose"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
