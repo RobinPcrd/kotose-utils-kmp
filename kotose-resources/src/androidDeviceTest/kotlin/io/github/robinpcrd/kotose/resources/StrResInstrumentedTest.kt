@@ -15,10 +15,10 @@ import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import com.google.common.truth.Truth.assertThat
+import io.github.robinpcrd.kotose.resources.test.R
 import io.github.robinpcrd.kotose_resources.generated.resources.Res
 import io.github.robinpcrd.kotose_resources.generated.resources.test_string_0
 import io.github.robinpcrd.kotose_resources.generated.resources.test_string_0_from
-import io.github.robinpcrd.kotoseandroid.test.R
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.json.Json
 import org.junit.Before
