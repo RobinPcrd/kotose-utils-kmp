@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     id("org.jetbrains.kotlin.multiplatform")
     id("com.android.kotlin.multiplatform.library")
@@ -79,15 +81,15 @@ kotlin {
     //macosX64()
     //macosArm64()
 
-    //jvm("desktop") {
-    //    compilations.all {
-    //        compileTaskProvider.configure {
-    //            compilerOptions {
-    //                jvmTarget.set(JvmTarget.JVM_11)
-    //            }
-    //        }
-    //    }
-    //}
+    jvm("desktop") {
+        compilations.all {
+            compileTaskProvider.configure {
+                compilerOptions {
+                    jvmTarget.set(JvmTarget.JVM_11)
+                }
+            }
+        }
+    }
 
     //js(IR) {
     //    browser()
@@ -100,18 +102,18 @@ kotlin {
 
     sourceSets {
 
-        //val desktopMain by getting
+        val desktopMain by getting
 
         val skikoMain by creating {
             dependsOn(commonMain.get())
             appleMain.get().dependsOn(this)
-            //desktopMain.dependsOn(this)
+            desktopMain.dependsOn(this)
         }
         val nonIosMain by creating {
             dependsOn(commonMain.get())
             //macosMain.get().dependsOn(this)
             androidMain.get().dependsOn(this)
-            //desktopMain.dependsOn(this)
+            desktopMain.dependsOn(this)
         }
 
         val darwinMain by creating {
@@ -122,7 +124,7 @@ kotlin {
 
         val jvmMain by creating {
             dependsOn(commonMain.get())
-            //desktopMain.dependsOn(this)
+            desktopMain.dependsOn(this)
             androidMain.get().dependsOn(this)
         }
     }
